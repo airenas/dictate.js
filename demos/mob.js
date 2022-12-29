@@ -48,9 +48,9 @@ function prettyfyHyp(text, doCapFirst, doPrependSpace) {
 	
 	text = text.replace(/ ([,.!?:;])/g,  "\$1");
 	text = text.replace(/ ?\n ?/g,  "\n");
+	text = text.replace(/_/g,  " ");
 	return text;
 }	
-
 
 var dictate = new Dictate({
 		server : $("#servers").val().split('|')[0],
