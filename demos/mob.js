@@ -130,14 +130,30 @@ var dictate = new Dictate({
 
 // Private methods (called from the callbacks)
 function __message(code, data) {
-	if (typeof(log) != 'undefined' && log != null) {
-		log.innerHTML = "msg: " + code + ": " + (data || '') + "\n" + log.innerHTML;
+	if (typeof (log) != 'undefined' && log != null) {
+		var dc = data;
+		if (code === 8) {
+			const parsedData = JSON.parse(data, (key, value) => {
+				if (typeof value === 'string' && key === 'value') {
+					return __trim(value, 100);
+				}
+				return value;
+			});
+			dc = JSON.stringify(parsedData);
+		}
+		log.innerHTML = "msg: " + code + ": " + (dc || '') + "\n" + __trim(log.innerHTML, 5000);
 	}
 }
 
+function __trim(str, l) {
+	return str.length > l ?
+		str.substring(0, l - 3) + "..." :
+		str;
+}
+
 function __error(code, data) {
-	if (typeof(log) != 'undefined' && log != null) {
-		log.innerHTML = "ERR: " + code + ": " + (data || '') + "\n" + log.innerHTML;
+	if (typeof (log) != 'undefined' && log != null) {
+		log.innerHTML = "ERR: " + code + ": " + (data || '') + "\n" + __trim(log.innerHTML, 5000);
 	}
 }
 
